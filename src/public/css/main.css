@@ -16,6 +16,7 @@
     4. Improve text rendering
   */
   body {
+    font-family: system-ui, 'Open Sans', 'Helvetica Neue', sans-serif;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
@@ -36,7 +37,6 @@
     7. Avoid text overflows
   */
   p, h1, h2, h3, h4, h5, h6 {
-    font-family: system-ui, 'Open Sans', 'Helvetica Neue', sans-serif;
     overflow-wrap: break-word;
   }
   /*
