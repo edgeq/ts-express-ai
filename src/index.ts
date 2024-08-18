@@ -18,7 +18,7 @@ app.set('twig options', {
     strict_variables: false,
 })
 
-app.get('/', (req: Request, res: Response,) => {
+app.get('/', (req: Request, res: Response) => {
     res.render('base', {
         title: 'Express & Typescript',
     })
