@@ -1,11 +1,27 @@
 import 'dotenv/config'
+import path from 'node:path';
 import express, { Express, Request, Response } from 'express'
 
 const app: Express = express();
 const port = process.env.PORT
+/**
+ * STATIC RESOURCES
+ */
+app.use(express.static(path.join(__dirname, 'public')))
+/**
+ * VIEW ENGINE
+ */
+app.set('views', './src/views')
+app.set('view engine', 'twig');
+app.set('twig options', {
+    allowAsync: true,
+    strict_variables: false,
+})
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Hi, from Express and a bunch of npm packages!')
+app.get('/', (req: Request, res: Response,) => {
+    res.render('base', {
+        title: 'Express & Typescript',
+    })
 })
 
 app.listen(port, () => {
