@@ -17,7 +17,9 @@ app.set('twig options', {
     allowAsync: true,
     strict_variables: false,
 })
-
+/**
+ * FIRST ROUTE
+ */
 app.get('/', (req: Request, res: Response) => {
     res.render('base', {
         title: 'Express & Typescript',
