@@ -4,10 +4,24 @@ import express, { Express, Request, Response } from 'express'
 
 const app: Express = express();
 const port = process.env.PORT
+
+// Parse URL-encoded bodies (as sent by HTML forms)
+app.use(express.urlencoded({ extended: true }))
+// Parse JSON bodies (as sent by API clients)
+app.use(express.json());
 /**
  * STATIC RESOURCES
  */
 app.use(express.static(path.join(__dirname, 'public')))
+app.use('/htmx', express.static(
+    path.join('node_modules', 'htmx.org', 'dist'),
+    {
+        setHeaders: (res, req, start) => {
+            res.set('Content-Type', 'application/javascript')
+        }
+    }
+));
+
 /**
  * VIEW ENGINE
  */
