@@ -39,6 +39,11 @@ app.get('/', (req: Request, res: Response) => {
         title: 'Express & Typescript',
     })
 })
+app.get('/get-html', (req: Request, res: Response) => {
+    res.render(path.join('partials', 'list'), {
+        list: ['should', 'swap', 'with', 'button'],
+    })
+})
 
 app.listen(port, () => {
     console.log(`App running on server port: http://localhost:${port}`)
