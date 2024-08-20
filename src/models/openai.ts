@@ -3,7 +3,7 @@ import OpenAI from 'openai'
 
 const openai = new OpenAI({})
 
-async function makePrompt(userInput) {
+async function makePrompt(userInput: string) {
     const SYSTEM_PROMPT = `
         You are an expert in prompt crafting.
         Use the text input to craft a detailed prompt for image generation.`
@@ -25,7 +25,7 @@ async function makePrompt(userInput) {
     return chatCompletion.choices[0].message.content
 }
 
-async function makeImage(prompt) {
+async function makeImage(prompt: string) {
     const response = await openai.images.generate({
         model: 'dall-e-2',
         n: 1,

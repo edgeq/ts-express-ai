@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import path from 'node:path';
 import express, { Express, Request, Response } from 'express'
-import { makePrompt, makeImage } from './models/openai.js'
+import { makePrompt, makeImage } from './models/openai'
 
 const app: Express = express();
 const port = process.env.PORT
@@ -43,14 +43,16 @@ app.get('/', (req: Request, res: Response) => {
 
 
 app.post('/make-image', async (req: Request, res: Response) => {
-    const prompt = await makePrompt(req.body.prompt);
-    const image = await makeImage(prompt)
-
-    res.render(path.join('partials', 'generated-image'), {
-        generatedPrompt: prompt,
-        imgUrl: image,
-        altText: req.body.prompt,
-    })
+    const prompt: string | null = await makePrompt(req.body.prompt);
+    if (typeof prompt === 'string') {
+        const image = await makeImage(prompt)
+        
+        res.render(path.join('partials', 'generated-image'), {
+            generatedPrompt: prompt,
+            imgUrl: image,
+            altText: req.body.prompt,
+        })
+    }
 })
 
 app.listen(port, () => {
