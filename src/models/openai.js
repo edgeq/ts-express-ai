@@ -28,9 +28,10 @@ async function makePrompt(userInput) {
 async function makeImage(prompt) {
     const response = await openai.images.generate({
         model: 'dall-e-2',
+        n: 1,
         prompt,
         size: '512x512',
-        n: 1,
+        style: 'natural', // 'vivid'
     })
 
     return response.data[0].url
