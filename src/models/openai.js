@@ -36,4 +36,4 @@ async function makeImage(prompt) {
     return response.data[0].url
 }
 
-export { openai, testPrompt, makePrompt, makeImage }
+export { openai, makePrompt, makeImage }
