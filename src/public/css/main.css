@@ -45,3 +45,30 @@
   #root, #__next {
     isolation: isolate;
   }
+
+  :root {
+    --img-dim: 512px;
+  }
+
+  .content {
+
+    display: flex;
+    justify-content: space-around;
+
+    .prompt {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .prompt__input {
+      height: var(--img-dim);
+      width: var(--img-dim);
+    }
+
+    .prompt__response {
+      border: 1px solid grey;
+      background-color: aliceblue;
+      height: var(--img-dim);
+      width: var(--img-dim);
+    }
+  }

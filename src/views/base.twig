@@ -8,7 +8,19 @@
         <title>{{ title }}</title>
     </head>
 <body>
-    <h1>Hello from {{ title }}</h1>
-    <button hx-get="/get-html" hx-swap="outerHTML">HTMx</button>
+    <header class="header">
+        <h1>Hello from {{ title }}</h1>
+        {# <button hx-get="/get-html" hx-swap="outerHTML">HTMx</button> #}
+    </header>
+    <main class="container">
+        <section class="content">
+            <form class="prompt" hx-post="/make-image" hx-target=".prompt__response">
+                <textarea class="prompt__input" name="prompt" id="prompt-1"></textarea>
+                <button type="submit">Generate</button>
+            </form>
+            <aside class="prompt__response"></aside>
+        </section>
+    </main>
+
 </body>
 </html>

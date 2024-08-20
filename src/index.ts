@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import path from 'node:path';
 import express, { Express, Request, Response } from 'express'
+import { makePrompt, makeImage } from './models/openai.js'
 
 const app: Express = express();
 const port = process.env.PORT
@@ -36,12 +37,19 @@ app.set('twig options', {
  */
 app.get('/', (req: Request, res: Response) => {
     res.render('base', {
-        title: 'Express & Typescript',
+        title: 'OpenAI',
     })
 })
-app.get('/get-html', (req: Request, res: Response) => {
-    res.render(path.join('partials', 'list'), {
-        list: ['should', 'swap', 'with', 'button'],
+
+
+app.post('/make-image', async (req: Request, res: Response) => {
+    const prompt = await makePrompt(req.body.prompt);
+    const image = await makeImage(prompt)
+
+    res.render(path.join('partials', 'generated-image'), {
+        generatedPrompt: prompt,
+        imgUrl: image,
+        altText: req.body.prompt,
     })
 })
 
