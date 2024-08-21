@@ -14,3 +14,5 @@ Uses the OpenAI ChatCompletion (`gpt-4o-mini`) and Image Generation (`dall-e-2`)
 
 ## Project 2
 Uses the Replicate API to run various models (`stability-ai/sdxl` and `videocrafter`) for Text-to-Image generation and Text-to-Video generation.
+
+![Surrealist style, a hobbit from Lord of The Rings riding the subway in a metroplitan city surrounded by other Middle Earth characters. I should see at least one wizard, an Elf, an Ork, and a Dwarf](src/public/assets/images/hobbit-subway.png "Hobbit Subway")
