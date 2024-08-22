@@ -52,3 +52,5 @@ async function saveImage(blob: Blob, filename: string) {
 }
 
 hfImage(prompt)
+
+export default { hfImage }
