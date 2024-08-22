@@ -2,7 +2,7 @@
 
 ## About
 
-This repo is an exploration of what's possible with Typescript, Express, and other packages, librarires, and models that might be interesting for Generative AI & JavaScript Development. It's more of a sketch pad to see what's out there. It also makes use of `HTMx` for minimalist server requests and `Twig` templating language for HTML-friendly markup.
+This repo is an exploration of what's possible with Typescript, Express, and other packages, libraries, and models that might be interesting for Generative AI & JavaScript Development. It's more of a sketch pad to see what's out there. It also makes use of `HTMx` for minimalist server requests and `Twig` templating language for HTML-friendly markup.
 
 > More Projects to Follow... until then, check out this weird image I was able to generate.
 

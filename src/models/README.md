@@ -8,5 +8,7 @@
 
 - `huggingface.ts`: leaves it to the developer to decide how to process the response.
 
+- `gemini.ts`: simple text generation. Can analyze media (photos & audio), but is not meant for generating media. Uses `gemini-1.5-flash`
+ 
 
 
