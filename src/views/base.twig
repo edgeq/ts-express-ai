@@ -3,8 +3,9 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="pico/pico.min.css">
+        <link rel="stylesheet" href="pico/pico.classless.min.css">
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/media-queries.css">
         <script src="htmx/htmx.min.js"></script>
         <title>{{ title }}</title>
     </head>
@@ -12,13 +13,28 @@
     <header class="header">
         <h1>Hello from {{ title }}</h1>
     </header>
-    <main class="container">
+    <main>
         <section class="content">
-            <form class="prompt" hx-post="/make-image" hx-target=".prompt__response">
+            <form
+                class="prompt"
+                hx-post="/make-image"
+                hx-target=".prompt__response"
+                hx-disabled-elt="find button"
+                hx-indicator="#loading-pulse, .prompt__submit-button-text"
+            >
                 <textarea class="prompt__input" name="prompt" id="prompt-1"></textarea>
-                <button type="submit">Generate</button>
+                <button class="prompt__submit-button" type="submit">
+                    <span class="prompt__submit-button-text">Generate</span>
+                    <img class="prompt__submit-button-indicator" id="loading-pulse" src="/svg/loaders/puff.svg">
+                </button>
             </form>
-            <aside class="prompt__response"></aside>
+            <aside class="prompt__response">
+                <figure class="prompt__figure">
+                    <img src="https://placehold.co/512x512" alt="placeholder image" class="gen-ai-image gen-ai-image--placeholder" />
+                    <figcaption>Generated Caption Goes here</figcaption>
+                    <figcaption>Rephrase prompt Goes here</figcaption>
+                </figure>
+            </aside>
         </section>
     </main>
 

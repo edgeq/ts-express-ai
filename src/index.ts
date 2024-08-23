@@ -64,6 +64,16 @@ app.post('/make-image', async (req: Request, res: Response) => {
     }
 })
 
+app.post('/make-image-test', async (req: Request, res: Response) => {
+    setTimeout(() => {
+        res.render(path.join('partials', 'generated-image'), {
+            generatedPrompt: 'prompt was made',
+            imgUrl: '/assets/images/out-1.webp',
+            altText: 'alt text goes here',
+        })
+    }, 5000)
+})
+
 app.listen(port, () => {
     console.log(`App running on server port: http://localhost:${port}`)
 })
