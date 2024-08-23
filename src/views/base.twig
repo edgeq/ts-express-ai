@@ -11,22 +11,33 @@
     </head>
 <body>
     <header class="header">
-        <h1>Hello from {{ title }}</h1>
+        <h1>{{ title }}</h1>
     </header>
     <main>
         <section class="content">
             <form
                 class="prompt"
-                hx-post="/make-image"
+                hx-post="/make-image-test"
                 hx-target=".prompt__response"
                 hx-disabled-elt="find button"
                 hx-indicator="#loading-pulse, .prompt__submit-button-text"
             >
+                <fieldset class="group radiogroup">
+                    <legend>Model APIs</legend>
+                    <input type="radio" id="hugging-face" name="model-api" value="hf" checked/>
+                    <label for="hugging-face">Hugging Face</label>
+                    <input type="radio" id="openai" name="model-api" value="openai"/>
+                    <label for="open-ai">Open AI</label>
+                    <input type="radio" id="replicate" name="model-api" value="replicate"/>
+                    <label for="replicate">Replicate</label>
+                </fieldset> 
+                <label for="prompt-1" class="prompt__label">Prompt</label> 
                 <textarea class="prompt__input" name="prompt" id="prompt-1"></textarea>
                 <button class="prompt__submit-button" type="submit">
                     <span class="prompt__submit-button-text">Generate</span>
                     <img class="prompt__submit-button-indicator" id="loading-pulse" src="/svg/loaders/puff.svg">
                 </button>
+                <p class="prompt__analysis"></p>
             </form>
             <aside class="prompt__response">
                 <figure class="prompt__figure">

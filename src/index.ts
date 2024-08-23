@@ -46,7 +46,7 @@ app.set('twig options', {
  */
 app.get('/', (req: Request, res: Response) => {
     res.render('base', {
-        title: 'OpenAI',
+        title: 'Text to Image Generation',
     })
 })
 
@@ -65,13 +65,14 @@ app.post('/make-image', async (req: Request, res: Response) => {
 })
 
 app.post('/make-image-test', async (req: Request, res: Response) => {
-    setTimeout(() => {
-        res.render(path.join('partials', 'generated-image'), {
-            generatedPrompt: 'prompt was made',
-            imgUrl: '/assets/images/out-1.webp',
-            altText: 'alt text goes here',
-        })
-    }, 5000)
+    console.log(req.body)
+    // setTimeout(() => {
+    //     res.render(path.join('partials', 'generated-image'), {
+    //         generatedPrompt: 'prompt was made',
+    //         imgUrl: '/assets/images/out-1.webp',
+    //         altText: 'alt text goes here',
+    //     })
+    // }, 5000)
 })
 
 app.listen(port, () => {
