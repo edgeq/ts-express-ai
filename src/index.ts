@@ -14,6 +14,15 @@ app.use(express.json());
  * STATIC RESOURCES
  */
 app.use(express.static(path.join(__dirname, 'public')))
+// node_modules/@picocss/pico/css/pico.min.css
+app.use('/pico', express.static(
+    path.join('node_modules', '@picocss', 'pico', 'css'),
+    {
+        setHeaders: (res, req, start) => {
+            res.set('Content-Type', 'text/css')
+        }
+    }
+))
 app.use('/htmx', express.static(
     path.join('node_modules', 'htmx.org', 'dist'),
     {
