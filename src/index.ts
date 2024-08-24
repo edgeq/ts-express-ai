@@ -52,15 +52,38 @@ app.get('/', (req: Request, res: Response) => {
 
 
 app.post('/make-image', async (req: Request, res: Response) => {
-    const prompt: string | null = await makePrompt(req.body.prompt);
+    const { model, prompt} = req.body;
+    
     if (typeof prompt === 'string') {
-        const image = await makeImage(prompt)
+        const chatStream = await makePrompt(req.body.prompt);
         
-        res.render(path.join('partials', 'generated-image'), {
-            generatedPrompt: prompt,
-            imgUrl: image,
-            altText: req.body.prompt,
-        })
+        console.log('rephrasePrompt');
+        
+        for await (const chunk of chatStream) {
+            console.log(chunk.choices[0]?.delta?.content);
+        }
+        // if req.body.model is one of three options, use that options api  
+        switch (model) {
+            case 'openai':
+                console.log('openai model')
+                break;
+            case 'huggingface':
+                console.log('huggingface model')
+                break;
+            case 'replicate':
+                console.log('replicate model')
+                break;
+        
+            default:
+                break;
+        }
+        // const image = await makeImage(prompt)
+        
+        // res.render(path.join('partials', 'generated-image'), {
+        //     generatedPrompt: prompt,
+        //     imgUrl: image,
+        //     altText: req.body.prompt,
+        // })
     }
 })
 
