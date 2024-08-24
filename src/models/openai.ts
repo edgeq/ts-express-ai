@@ -24,7 +24,7 @@ async function makePrompt(userInput: string) {
         stream: true,
         stream_options: {"include_usage": true}
     })
-
+    // Help me return this chatStream to the client
     return chatStream;
 }
 

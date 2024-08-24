@@ -53,15 +53,19 @@ app.get('/', (req: Request, res: Response) => {
 
 app.post('/make-image', async (req: Request, res: Response) => {
     const { model, prompt} = req.body;
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
     
     if (typeof prompt === 'string') {
         const chatStream = await makePrompt(req.body.prompt);
         
         console.log('rephrasePrompt');
         
-        for await (const chunk of chatStream) {
-            console.log(chunk.choices[0]?.delta?.content);
-        }
+        // for await (const chunk of chatStream) {
+        //     console.log(chunk.choices[0]?.delta?.content);
+        // }
+        chatStream.toReadableStream()
         // if req.body.model is one of three options, use that options api  
         switch (model) {
             case 'openai':
