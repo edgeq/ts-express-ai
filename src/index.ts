@@ -73,10 +73,15 @@ app.get('/make-prompt', async (req: Request, res: Response) => {
 
     if (typeof prompt === 'string') {
         const promptStream = await makePrompt(prompt);
+        let newPrompt = ''
         for await (const chunk of promptStream) {
             const chunkSplit = chunk.choices[0]?.delta?.content;
+            newPrompt += chunkSplit;
             sendEvent({ promptResponse: chunkSplit });
         }
+        // TODO: if chunk.choices[0]?.finish_reason === 'stop'
+        // make an image from the prompt using the appropriate model
+        // modelAPI = 'hf' | 'openai' | 'replcate'
     }
 
 
