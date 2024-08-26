@@ -17,6 +17,7 @@
 }
 
 .prompt {
+  max-width: var(--img-dim);
   .prompt__submit-button {
     display: flex;
     justify-content: center;

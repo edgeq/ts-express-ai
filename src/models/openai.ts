@@ -9,7 +9,7 @@ async function makePrompt(userInput: string) {
         Use the text input to craft a detailed prompt for image generation.
         Keep the prompt length under 500 characters`
 
-    const chatCompletion = await openai.chat.completions.create({
+    const chatStream = await openai.chat.completions.create({
         model: 'gpt-4o-mini',
         messages: [
             {
@@ -21,9 +21,11 @@ async function makePrompt(userInput: string) {
                 content: userInput
             }
         ],
+        stream: true,
+        stream_options: {"include_usage": true},
     })
-
-    return chatCompletion.choices[0].message.content
+    // Help me return this chatStream to the client
+    return chatStream;
 }
 
 async function makeImage(prompt: string) {

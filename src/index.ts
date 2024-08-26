@@ -14,6 +14,13 @@ app.use(express.json());
  * STATIC RESOURCES
  */
 app.use(express.static(path.join(__dirname, 'public')))
+app.use('/js', express.static(
+    path.join(__dirname, 'public'),
+    {
+        setHeaders: (res, req, start) => {
+            res.set('Content-Type', 'application/javascript')
+        }
+    }))
 // node_modules/@picocss/pico/css/pico.min.css
 app.use('/pico', express.static(
     path.join('node_modules', '@picocss', 'pico', 'css'),
@@ -50,12 +57,44 @@ app.get('/', (req: Request, res: Response) => {
     })
 })
 
+app.get('/make-prompt', async (req: Request, res: Response) => {
+    const { prompt } = req.query || '';
+    console.log('make prompt from prompt', prompt);
+    
+    res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+    });
+
+    const sendEvent = (data: object) => {
+        res.write(`data: ${JSON.stringify(data)}\n\n`);
+    }
+
+    if (typeof prompt === 'string') {
+        const promptStream = await makePrompt(prompt);
+        let newPrompt = ''
+        for await (const chunk of promptStream) {
+            const chunkSplit = chunk.choices[0]?.delta?.content;
+            newPrompt += chunkSplit;
+            sendEvent({ promptResponse: chunkSplit });
+        }
+        // TODO: if chunk.choices[0]?.finish_reason === 'stop'
+        // make an image from the prompt using the appropriate model
+        // modelAPI = 'hf' | 'openai' | 'replcate'
+    }
+
+
+    req.on('close', () => {
+        console.log('Connection closed');
+    });
+})
 
 app.post('/make-image', async (req: Request, res: Response) => {
-    const prompt: string | null = await makePrompt(req.body.prompt);
+    // const prompt: string | null = await makePrompt(req.body.prompt);
     if (typeof prompt === 'string') {
-        const image = await makeImage(prompt)
-        
+        const image = await makeImage(req.body.prompt)
+
         res.render(path.join('partials', 'generated-image'), {
             generatedPrompt: prompt,
             imgUrl: image,

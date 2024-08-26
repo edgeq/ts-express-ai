@@ -1,5 +1,10 @@
 {
-  "watch": ["src/**/*.ts", "src/views/**/*.twig", "src/public/css/*.css"],
+  "watch": [
+    "src/**/*.ts",
+    "src/views/**/*.twig",
+    "src/public/css/*.css",
+    "src/public/js/*.js"
+  ],
   "ext": "ts, twig, css",
   "exec": "concurrently \"npx tsc --watch\" \"ts-node src/index.ts\""
 }
