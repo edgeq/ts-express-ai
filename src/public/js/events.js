@@ -1,24 +1,28 @@
-// const eventSource = new EventSource('/make-prompt');
+const form = document.getElementById('prompt-form');
+const promptResult = document.getElementById('prompt-result');
 
-// console.log('eventSource', eventSource);
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    console.log(formData);
+    const urlParams = new URLSearchParams(formData);
+    console.log(urlParams);
+    const promptURL = `/make-prompt?${urlParams.toString()}`;
+    console.log(promptURL);
+    const eventSource = new EventSource(promptURL);
 
+    eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        console.log(data);
 
-// eventSource.onopen = (event) => {
-//     console.log('open', event);
-// };
+        if (data.promptResponse) {
+            promptResult.innerHTML += data.promptResponse;
+        }
+    };
 
-// eventSource.onmessage = (event) => {
-//     console.log('message', event);
-// };
+    eventSource.onerror = (error) => {
+        console.error('EventSource error:', error);
+      };
 
-// // eventSource.addEventListener('message', (event) => {
-// //     console.log('message', event);
-// // });
-
-// // eventSource.addEventListener('data', (event) => {
-// //     console.log('data', event);
-// // });
-
-// eventSource.onerror = (event) => {
-//     console.log('error', event);
-// };
+});

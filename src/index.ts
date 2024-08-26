@@ -58,14 +58,31 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.get('/make-prompt', async (req: Request, res: Response) => {
-    console.log('make-prompt');
+    const { prompt } = req.query || '';
+    console.log('make prompt from prompt', prompt);
+    
     res.writeHead(200, {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
         'Connection': 'keep-alive',
     });
-    res.write('prompt is being made');
-    res.end();
+
+    const sendEvent = (data: object) => {
+        res.write(`data: ${JSON.stringify(data)}\n\n`);
+    }
+
+    if (typeof prompt === 'string') {
+        const promptStream = await makePrompt(prompt);
+        for await (const chunk of promptStream) {
+            const chunkSplit = chunk.choices[0]?.delta?.content;
+            sendEvent({ promptResponse: chunkSplit });
+        }
+    }
+
+
+    req.on('close', () => {
+        console.log('Connection closed');
+    });
 })
 
 app.post('/make-image', async (req: Request, res: Response) => {
