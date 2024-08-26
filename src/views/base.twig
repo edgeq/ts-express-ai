@@ -39,12 +39,7 @@
                     <img class="prompt__submit-button-indicator" id="loading-pulse" src="/svg/loaders/puff.svg">
                 </button>
                 {# SSE div #}
-                <p
-                    id="prompt-result"
-                    hx-ext="sse"
-                    sse-connect="/make-prompt"
-                    sse-swap="beforeend"
-                ></p>
+                <p id="prompt-result"></p>
             </form>
             <aside class="prompt__response">
                 <figure class="prompt__figure">

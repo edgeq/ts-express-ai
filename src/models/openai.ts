@@ -7,7 +7,7 @@ async function makePrompt(userInput: string) {
     const SYSTEM_PROMPT = `
         You are an expert in prompt crafting.
         Use the text input to craft a detailed prompt for image generation.
-        Keep the prompt length under 500 characters`
+        Keep the prompt length under 900 characters`
 
     const chatStream = await openai.chat.completions.create({
         model: 'gpt-4o-mini',
