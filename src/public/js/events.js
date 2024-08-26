@@ -5,11 +5,8 @@ form.addEventListener('submit', (e) => {
     e.preventDefault();
     
     const formData = new FormData(form);
-    console.log(formData);
     const urlParams = new URLSearchParams(formData);
-    console.log(urlParams);
     const promptURL = `/make-prompt?${urlParams.toString()}`;
-    console.log(promptURL);
     const eventSource = new EventSource(promptURL);
 
     eventSource.onmessage = (event) => {
