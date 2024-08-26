@@ -14,6 +14,13 @@ app.use(express.json());
  * STATIC RESOURCES
  */
 app.use(express.static(path.join(__dirname, 'public')))
+app.use('/js', express.static(
+    path.join(__dirname, 'public'),
+    {
+        setHeaders: (res, req, start) => {
+            res.set('Content-Type', 'application/javascript')
+        }
+    }))
 // node_modules/@picocss/pico/css/pico.min.css
 app.use('/pico', express.static(
     path.join('node_modules', '@picocss', 'pico', 'css'),
@@ -50,44 +57,27 @@ app.get('/', (req: Request, res: Response) => {
     })
 })
 
+app.get('/make-prompt', async (req: Request, res: Response) => {
+    console.log('make-prompt');
+    res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+    });
+    res.write('prompt is being made');
+    res.end();
+})
 
 app.post('/make-image', async (req: Request, res: Response) => {
-    const { model, prompt} = req.body;
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
-    
+    // const prompt: string | null = await makePrompt(req.body.prompt);
     if (typeof prompt === 'string') {
-        const chatStream = await makePrompt(req.body.prompt);
-        
-        console.log('rephrasePrompt');
-        
-        // for await (const chunk of chatStream) {
-        //     console.log(chunk.choices[0]?.delta?.content);
-        // }
-        chatStream.toReadableStream()
-        // if req.body.model is one of three options, use that options api  
-        switch (model) {
-            case 'openai':
-                console.log('openai model')
-                break;
-            case 'huggingface':
-                console.log('huggingface model')
-                break;
-            case 'replicate':
-                console.log('replicate model')
-                break;
-        
-            default:
-                break;
-        }
-        // const image = await makeImage(prompt)
-        
-        // res.render(path.join('partials', 'generated-image'), {
-        //     generatedPrompt: prompt,
-        //     imgUrl: image,
-        //     altText: req.body.prompt,
-        // })
+        const image = await makeImage(req.body.prompt)
+
+        res.render(path.join('partials', 'generated-image'), {
+            generatedPrompt: prompt,
+            imgUrl: image,
+            altText: req.body.prompt,
+        })
     }
 })
 
