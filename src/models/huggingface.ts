@@ -8,7 +8,6 @@ const HF_API_TOKEN = process.env.HF_API_TOKEN
 const hf = new HfInference(HF_API_TOKEN)
 const model_flux = 'black-forest-labs/FLUX.1-dev'
 const model_stable = 'stabilityai/stable-diffusion-3-medium-diffusers'
-const prompt = 'Surrealist style, a hobbit from Lord of The Rings riding the subway in a metroplitan city surrounded by other Middle Earth characters. I should see at least one wizard, an Elf, an Ork, and a Dwarf'
 
 // Text-to-image
 /**
@@ -28,7 +27,9 @@ async function hfImage(prompt: string) {
     })
 
     const blob = imgReq as Blob;
-    await saveImage(blob, 'hf-image-stable.jpg')
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').split('.')[0];
+    await saveImage(blob, `hf-image-stable_${timestamp}.jpg`)
+    return { title: `hf-image-stable_${timestamp}.jpg` }
 }
 /**
  * Converts a Blob to a Buffer.
@@ -51,6 +52,4 @@ async function saveImage(blob: Blob, filename: string) {
     
 }
 
-hfImage(prompt)
-
-export default { hfImage }
+export { hfImage }

@@ -2,6 +2,7 @@ import 'dotenv/config'
 import path from 'node:path';
 import express, { Express, Request, Response } from 'express'
 import { makePrompt, makeImage } from './models/openai'
+import { hfImage } from './models/huggingface'
 
 const app: Express = express();
 const port = process.env.PORT
@@ -58,7 +59,7 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.get('/make-prompt', async (req: Request, res: Response) => {
-    const { prompt } = req.query || '';
+    const { prompt, modelApi } = req.query || '';
     console.log('make prompt from prompt', prompt);
     
     res.writeHead(200, {
@@ -79,17 +80,17 @@ app.get('/make-prompt', async (req: Request, res: Response) => {
             newPrompt += chunkSplit;
             sendEvent({ promptResponse: chunkSplit });
         }
-        // TODO: if chunk.choices[0]?.finish_reason === 'stop'
-        // make an image from the prompt using the appropriate model
-        // modelAPI = 'hf' | 'openai' | 'replcate'
     }
-
-
+    
+    
     req.on('close', () => {
         console.log('Connection closed');
     });
 })
 
+// TODO:
+// make an image from the prompt using the appropriate model
+// modelAPI = 'hf' | 'openai' | 'replcate'
 app.post('/make-image', async (req: Request, res: Response) => {
     // const prompt: string | null = await makePrompt(req.body.prompt);
     if (typeof prompt === 'string') {
