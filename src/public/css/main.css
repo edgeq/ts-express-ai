@@ -24,6 +24,9 @@
     align-items: center;
     width: var(--img-dim);
   }
+  .prompt__rephrase {
+    height: 368px;
+  }
   .prompt__submit-button-text.htmx-request,
   .prompt__submit-button-indicator {
     display: none;
@@ -44,4 +47,15 @@
     display: flex;
     flex-direction: column;
   }
+}
+
+.gen-ai-image {
+  width: var(--img-dim);
+  height: var(--img-dim);
+  background: url(512x512.svg) no-repeat center center;
+  display: block;
+}
+
+.htmx-request.gen-ai-image.hx-indicator {
+  background: url(puff.svg) no-repeat center center;
 }
