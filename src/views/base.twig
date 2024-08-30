@@ -47,17 +47,21 @@
                         class="image__generate-button"
                         hx-post="/make-image"
                         hx-include="#prompt-form"
-                        hx-target=".prompt__response"
+                        hx-target=".prompt__response-image"
                         hx-swap="innerHTML"
-                        hx-indicator="#img-placeholder"
+                        hx-indicator=".prompt__response"
                     >Generate Image</button>
                 </form>
             </div>
             <aside class="prompt__response">
-                <figure class="prompt__figure">
-                    <div id="img-placeholder" class="gen-ai-image gen-ai-image--placeholder hx-indicator" />
-                    {# <figcaption class="prompt__response-caption">Analysis Caption Goes here</figcaption> #}
-                </figure>
+                <div class="prompt__response-image">
+                    <figure class="prompt__figure">
+                        {# INITIAL STATE #}
+                        <img src="/svg/512x512.svg" alt="loading" class="prompt__response-placeholder htmx-indicator" />
+                        {# LOADING STATE #}
+                        <img src="/svg/loaders/puff.svg" alt="loading" class="prompt__response-loader htmx-indicator" />
+                    </figure>
+                </div>
             </aside>
         </section>
     </main>

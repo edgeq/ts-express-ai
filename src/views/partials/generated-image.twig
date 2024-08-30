@@ -1,4 +1,6 @@
 <figure class="prompt__figure">
-    <img id="img-placeholder" src="{{ imgUrl }}" alt="{{ altText }}" class="gen-ai-image hx-indicator" />
-    <figcaption>{{ generatedPrompt }}</figcaption>
+    {# IMAGE LOADED #}
+    <img id="img-response" src="{{ imgUrl }}" alt="{{ altText }}" class="gen-ai-image htmx-indicator" />
+    {# LOADING STATE #}
+    <img src="/svg/loaders/puff.svg" alt="loading" class="prompt__response-loader htmx-indicator" />
 </figure>

@@ -38,6 +38,7 @@
 }
 
 .prompt__response {
+  align-self: center;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,15 +48,22 @@
     display: flex;
     flex-direction: column;
   }
+
+  .prompt__response-image .prompt__figure {
+    .prompt__response-placeholder.htmx-indicator,
+    .gen-ai-image.htmx-indicator {
+      opacity: 1;
+    }
+
+  }
 }
 
-.gen-ai-image {
-  width: var(--img-dim);
-  height: var(--img-dim);
-  background: url(512x512.svg) no-repeat center center;
-  display: block;
-}
-
-.htmx-request.gen-ai-image.hx-indicator {
-  background: url(puff.svg) no-repeat center center;
+.prompt__response.htmx-request {
+  .prompt__response-image .prompt__figure {
+    .htmx-indicator.prompt__response-placeholder,
+    .htmx-indicator.gen-ai-image {
+      opacity: 0;
+      display: none;
+    }
+  }
 }
