@@ -24,7 +24,7 @@ async function makePrompt(userInput: string) {
         stream: true,
         stream_options: {"include_usage": true},
     })
-    // Help me return this chatStream to the client
+    // returns the chatStream to the client
     return chatStream;
 }
 
@@ -36,8 +36,6 @@ async function makeImage(prompt: string) {
         size: '512x512',
         style: 'natural', // 'vivid'
     })
-
-    console.log(response.data)
 
     return response.data[0].url
 }

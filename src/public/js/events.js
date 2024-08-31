@@ -12,7 +12,6 @@ form.addEventListener('submit', (e) => {
 
     eventSource.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        console.log(data);
 
         if (data.promptResponse) {
             form.querySelector('button').disabled = true;
@@ -21,8 +20,6 @@ form.addEventListener('submit', (e) => {
             form.querySelector('button').disabled = false;
         }
     };
-
-    // TODO: Trigger loading states while we wait for prompt response to clear out
 
     eventSource.onerror = (error) => {
         console.error('EventSource error:', error);

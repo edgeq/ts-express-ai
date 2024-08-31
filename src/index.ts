@@ -60,8 +60,7 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.get('/make-prompt', async (req: Request, res: Response) => {
-    const { prompt, modelApi } = req.query || '';
-    // console.log('make prompt from prompt', prompt);
+    const { prompt } = req.query || '';
     
     res.writeHead(200, {
         'Content-Type': 'text/event-stream',
@@ -89,15 +88,14 @@ app.get('/make-prompt', async (req: Request, res: Response) => {
     });
 })
 
-// TODO:
 // make an image from the prompt using the appropriate model
 // modelAPI = 'hf' | 'openai' | 'replicate'
 app.post('/make-image', async (req: Request, res: Response) => {
-    const { prompt, modelApi, promptRephrase } = req.body; 
-    console.log('stuff', req.body);
+    const { modelApi, promptRephrase } = req.body; 
+    // Using any here because the image response is different for each model
     let image: any;
     if (typeof promptRephrase === 'string') {
-        console.log('make image from prompt rephrase');
+
         switch (modelApi) {
             case 'hf':
                 image = await hfImage(req.body.promptRephrase);
@@ -131,17 +129,6 @@ app.post('/make-image', async (req: Request, res: Response) => {
                 break;
         }
     }
-})
-
-app.post('/make-image-test', async (req: Request, res: Response) => {
-    console.log(req.body)
-    // setTimeout(() => {
-    //     res.render(path.join('partials', 'generated-image'), {
-    //         generatedPrompt: 'prompt was made',
-    //         imgUrl: '/assets/images/out-1.webp',
-    //         altText: 'alt text goes here',
-    //     })
-    // }, 5000)
 })
 
 app.listen(port, () => {

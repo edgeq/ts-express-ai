@@ -5,9 +5,7 @@ const replicate = new Replicate({
     auth: process.env.REPLICATE_API_TOKEN,
 })
 
-console.log("Let's run that model!")
-console.log("=======")
-
+// Should be fine to list these models here since an API token is still needed to access them
 const IMG_MODEL = 'adirik/flux-cinestill:216a43b9975de9768114644bbf8cd0cba54a923c6d0f65adceaccfc9383a938f'
 const VIDEO_MODEL = 'cjwbw/videocrafter:02edcff3e9d2d11dcc27e530773d988df25462b1ee93ed0257b6f246de4797c8'
 
