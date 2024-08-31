@@ -3,6 +3,7 @@ import path from 'node:path';
 import express, { Express, Request, Response } from 'express'
 import { makePrompt, makeImage } from './models/openai'
 import { hfImage } from './models/huggingface'
+import { replicateImage } from './models/replicate'
 
 const app: Express = express();
 const port = process.env.PORT
@@ -90,19 +91,45 @@ app.get('/make-prompt', async (req: Request, res: Response) => {
 
 // TODO:
 // make an image from the prompt using the appropriate model
-// modelAPI = 'hf' | 'openai' | 'replcate'
+// modelAPI = 'hf' | 'openai' | 'replicate'
 app.post('/make-image', async (req: Request, res: Response) => {
     const { prompt, modelApi, promptRephrase } = req.body; 
     console.log('stuff', req.body);
+    let image: any;
     if (typeof promptRephrase === 'string') {
         console.log('make image from prompt rephrase');
-        const image = await hfImage(req.body.promptRephrase);
-        console.log('image?', image);
-        res.render(path.join('partials', 'generated-image'), {
-            generatedPrompt: image.altText,
-            imgUrl: image.imgUrl,
-            altText: image.altText,
-        })
+        switch (modelApi) {
+            case 'hf':
+                image = await hfImage(req.body.promptRephrase);
+                console.log('image?', image);
+                res.render(path.join('partials', 'generated-image'), {
+                    generatedPrompt: image.altText,
+                    imgUrl: image.imgUrl,
+                    altText: image.altText,
+                })
+                break;
+            case 'openai':
+                image = await makeImage(req.body.promptRephrase);
+                console.log('image?', image);
+                res.render(path.join('partials', 'generated-image'), {
+                    generatedPrompt: req.body.promptRephrase,
+                    imgUrl: image,
+                    altText: req.body.promptRephrase,
+                })
+                break;
+            case 'replicate':
+                image = await replicateImage(req.body.promptRephrase);
+                console.log('image?', image[0]);
+                res.render(path.join('partials', 'generated-image'), {
+                    generatedPrompt: req.body.promptRephrase,
+                    imgUrl: image[0],
+                    altText: req.body.promptRephrase,
+                })
+                break;
+        
+            default:
+                break;
+        }
     }
 })
 

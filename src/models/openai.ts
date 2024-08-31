@@ -37,6 +37,8 @@ async function makeImage(prompt: string) {
         style: 'natural', // 'vivid'
     })
 
+    console.log(response.data)
+
     return response.data[0].url
 }
 
