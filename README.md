@@ -17,4 +17,13 @@ Each user-provided prompt gets re-written using `OpenAI Chat Completion` and str
 
 Still a WIP but interesting to see what options are out there for building full stack GENAI apps.
 
+
+```
+git clone git@github.com:edgeq/ts-express-ai.git
+npm install
+```
+To run this locally, you will need to make your own [`.env`](./.env.example) file file with whatever API Tokens you want to to use, then run:
+
+`npm run dev`
+
 > More Projects to Follow... 
