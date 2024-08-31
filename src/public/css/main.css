@@ -24,6 +24,9 @@
     align-items: center;
     width: var(--img-dim);
   }
+  .prompt__rephrase {
+    height: 368px;
+  }
   .prompt__submit-button-text.htmx-request,
   .prompt__submit-button-indicator {
     display: none;
@@ -35,6 +38,7 @@
 }
 
 .prompt__response {
+  align-self: center;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,5 +47,23 @@
     width: var(--img-dim);
     display: flex;
     flex-direction: column;
+  }
+
+  .prompt__response-image .prompt__figure {
+    .prompt__response-placeholder.htmx-indicator,
+    .gen-ai-image.htmx-indicator {
+      opacity: 1;
+    }
+
+  }
+}
+
+.prompt__response.htmx-request {
+  .prompt__response-image .prompt__figure {
+    .htmx-indicator.prompt__response-placeholder,
+    .htmx-indicator.gen-ai-image {
+      opacity: 0;
+      display: none;
+    }
   }
 }

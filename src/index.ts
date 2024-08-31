@@ -2,6 +2,8 @@ import 'dotenv/config'
 import path from 'node:path';
 import express, { Express, Request, Response } from 'express'
 import { makePrompt, makeImage } from './models/openai'
+import { hfImage } from './models/huggingface'
+import { replicateImage } from './models/replicate'
 
 const app: Express = express();
 const port = process.env.PORT
@@ -58,8 +60,8 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.get('/make-prompt', async (req: Request, res: Response) => {
-    const { prompt } = req.query || '';
-    console.log('make prompt from prompt', prompt);
+    const { prompt, modelApi } = req.query || '';
+    // console.log('make prompt from prompt', prompt);
     
     res.writeHead(200, {
         'Content-Type': 'text/event-stream',
@@ -79,27 +81,55 @@ app.get('/make-prompt', async (req: Request, res: Response) => {
             newPrompt += chunkSplit;
             sendEvent({ promptResponse: chunkSplit });
         }
-        // TODO: if chunk.choices[0]?.finish_reason === 'stop'
-        // make an image from the prompt using the appropriate model
-        // modelAPI = 'hf' | 'openai' | 'replcate'
     }
-
-
+    
+    
     req.on('close', () => {
         console.log('Connection closed');
     });
 })
 
+// TODO:
+// make an image from the prompt using the appropriate model
+// modelAPI = 'hf' | 'openai' | 'replicate'
 app.post('/make-image', async (req: Request, res: Response) => {
-    // const prompt: string | null = await makePrompt(req.body.prompt);
-    if (typeof prompt === 'string') {
-        const image = await makeImage(req.body.prompt)
-
-        res.render(path.join('partials', 'generated-image'), {
-            generatedPrompt: prompt,
-            imgUrl: image,
-            altText: req.body.prompt,
-        })
+    const { prompt, modelApi, promptRephrase } = req.body; 
+    console.log('stuff', req.body);
+    let image: any;
+    if (typeof promptRephrase === 'string') {
+        console.log('make image from prompt rephrase');
+        switch (modelApi) {
+            case 'hf':
+                image = await hfImage(req.body.promptRephrase);
+                console.log('image?', image);
+                res.render(path.join('partials', 'generated-image'), {
+                    generatedPrompt: image.altText,
+                    imgUrl: image.imgUrl,
+                    altText: image.altText,
+                })
+                break;
+            case 'openai':
+                image = await makeImage(req.body.promptRephrase);
+                console.log('image?', image);
+                res.render(path.join('partials', 'generated-image'), {
+                    generatedPrompt: req.body.promptRephrase,
+                    imgUrl: image,
+                    altText: req.body.promptRephrase,
+                })
+                break;
+            case 'replicate':
+                image = await replicateImage(req.body.promptRephrase);
+                console.log('image?', image[0]);
+                res.render(path.join('partials', 'generated-image'), {
+                    generatedPrompt: req.body.promptRephrase,
+                    imgUrl: image[0],
+                    altText: req.body.promptRephrase,
+                })
+                break;
+        
+            default:
+                break;
+        }
     }
 })
 

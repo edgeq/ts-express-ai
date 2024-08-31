@@ -1,14 +1,13 @@
 import 'dotenv/config'
 import { HfInference } from "@huggingface/inference"
-import { writeFileSync } from 'node:fs'
+import fs from 'node:fs'
 import path from 'node:path';
 
 const HF_API_TOKEN = process.env.HF_API_TOKEN
 
 const hf = new HfInference(HF_API_TOKEN)
-const model_flux = 'black-forest-labs/FLUX.1-dev'
+// const model_flux = 'black-forest-labs/FLUX.1-dev'
 const model_stable = 'stabilityai/stable-diffusion-3-medium-diffusers'
-const prompt = 'Surrealist style, a hobbit from Lord of The Rings riding the subway in a metroplitan city surrounded by other Middle Earth characters. I should see at least one wizard, an Elf, an Ork, and a Dwarf'
 
 // Text-to-image
 /**
@@ -22,13 +21,17 @@ const prompt = 'Surrealist style, a hobbit from Lord of The Rings riding the sub
  * @returns A Promise that resolves to a Blob response containing the converted image.
  */
 async function hfImage(prompt: string) {
+    console.log('====HF IMAGE====');
     const imgReq = await hf.textToImage({
         model: model_stable,
         inputs: prompt,
     })
+    console.log('imgReq', imgReq);
 
     const blob = imgReq as Blob;
-    await saveImage(blob, 'hf-image-stable.jpg')
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').split('.')[0];
+    await saveImage(blob, `hf-image-stable_${timestamp}.jpg`)
+    return { imgUrl: `/assets/images/hf-image-stable_${timestamp}.jpg`, altText: prompt }
 }
 /**
  * Converts a Blob to a Buffer.
@@ -45,12 +48,11 @@ async function blobToBuffer(blob: Blob) : Promise<Buffer> {
  * @param filename 
  */
 async function saveImage(blob: Blob, filename: string) {
+    console.log('saving image');
     const imageRoot = path.join(__dirname, '..', 'public', 'assets', 'images')
     const buffer = await blobToBuffer(blob)
-    writeFileSync(path.join(imageRoot, filename), buffer)
-    
+    // get the imageRoot, save the buffer to the file system, and return the path once done
+    fs.createWriteStream(path.join(imageRoot, filename)).write(buffer)
 }
 
-hfImage(prompt)
-
-export default { hfImage }
+export { hfImage }

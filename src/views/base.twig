@@ -19,34 +19,49 @@
                 BUT, client-side JS can tie into the SSE event stream
                 in order to update the prompt analysis in real-time
             #}
-            <form
-                id="prompt-form"
-                class="prompt"
-            >
-                <fieldset class="group radiogroup">
-                    <legend>Model APIs</legend>
-                    <input type="radio" id="hugging-face" name="modelApi" value="hf" checked/>
-                    <label for="hugging-face">Hugging Face</label>
-                    <input type="radio" id="openai" name="modelApi" value="openai"/>
-                    <label for="open-ai">Open AI</label>
-                    <input type="radio" id="replicate" name="modelApi" value="replicate"/>
-                    <label for="replicate">Replicate</label>
-                </fieldset> 
-                <label for="prompt-1" class="prompt__label">Prompt</label> 
-                <textarea class="prompt__input" name="prompt" id="prompt-1"></textarea>
-                <button class="prompt__submit-button" type="submit">
-                    <span class="prompt__submit-button-text">Generate</span>
-                    <img class="prompt__submit-button-indicator" id="loading-pulse" src="/svg/loaders/puff.svg">
-                </button>
-                {# SSE div #}
-                <p id="prompt-result"></p>
-            </form>
+            <div class="prompt">
+                <form
+                    id="prompt-form"
+                >
+                    <fieldset class="group radiogroup">
+                        <legend>Model APIs</legend>
+                        <input type="radio" id="hugging-face" name="modelApi" value="hf" checked/>
+                        <label for="hugging-face">Hugging Face</label>
+                        <input type="radio" id="openai" name="modelApi" value="openai"/>
+                        <label for="open-ai">Open AI</label>
+                        <input type="radio" id="replicate" name="modelApi" value="replicate"/>
+                        <label for="replicate">Replicate</label>
+                    </fieldset> 
+                    <label for="prompt-1" class="prompt__label">Prompt</label> 
+                    <textarea class="prompt__input" name="prompt" id="prompt-1"></textarea>
+                    <button class="prompt__submit-button" type="submit">
+                        <span class="prompt__submit-button-text">Generate</span>
+                        <img class="prompt__submit-button-indicator" id="loading-pulse" src="/svg/loaders/puff.svg">
+                    </button>
+                    {# SSE div #}
+                    <label for="prompt-result">
+                        Prompt Rephrase
+                    <textarea id="prompt-result" class="prompt__rephrase" name="promptRephrase"></textarea>
+                    </label> 
+                    <button
+                        class="image__generate-button"
+                        hx-post="/make-image"
+                        hx-include="#prompt-form"
+                        hx-target=".prompt__response-image"
+                        hx-swap="innerHTML"
+                        hx-indicator=".prompt__response"
+                    >Generate Image</button>
+                </form>
+            </div>
             <aside class="prompt__response">
-                <figure class="prompt__figure">
-                    <img src="https://placehold.co/512x512" alt="placeholder image" class="gen-ai-image gen-ai-image--placeholder" />
-                    <figcaption class="prompt__response-caption">Generated Caption Goes here</figcaption>
-                    <figcaption class="prompt__response-rephrase">Rephrase prompt Goes here</figcaption>
-                </figure>
+                <div class="prompt__response-image">
+                    <figure class="prompt__figure">
+                        {# INITIAL STATE #}
+                        <img src="/svg/512x512.svg" alt="loading" class="prompt__response-placeholder htmx-indicator" />
+                        {# LOADING STATE #}
+                        <img src="/svg/loaders/puff.svg" alt="loading" class="prompt__response-loader htmx-indicator" />
+                    </figure>
+                </div>
             </aside>
         </section>
     </main>
