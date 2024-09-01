@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import path from 'node:path';
 import express, { Express, Request, Response } from 'express'
+import { makeImagePrompt } from './models/gemini'
 import { makePrompt, makeImage } from './models/openai'
 import { hfImage } from './models/huggingface'
 import { replicateImage } from './models/replicate'
@@ -73,13 +74,23 @@ app.get('/make-prompt', async (req: Request, res: Response) => {
     }
 
     if (typeof prompt === 'string') {
-        const promptStream = await makePrompt(prompt);
+        const promptStream = await makeImagePrompt(prompt);
         let newPrompt = ''
         for await (const chunk of promptStream) {
-            const chunkSplit = chunk.choices[0]?.delta?.content;
-            newPrompt += chunkSplit;
-            sendEvent({ promptResponse: chunkSplit });
+            const chunkSplit = chunk.text();
+            if (chunk.candidates) {
+                if (chunk.text().endsWith(" \n") && chunk.candidates[0].finishReason === 'STOP') {
+                    console.log('SHOULD SEND STOP');
+                    newPrompt += chunkSplit;
+                    sendEvent({ promptResponse: chunkSplit });
+                    sendEvent({});
+                    return;
+                }
+                sendEvent({ promptResponse: chunkSplit });
+                newPrompt += chunkSplit;
+            }
         }
+        console.log('newPrompt', newPrompt);
     }
     
     
@@ -91,7 +102,7 @@ app.get('/make-prompt', async (req: Request, res: Response) => {
 // make an image from the prompt using the appropriate model
 // modelAPI = 'hf' | 'openai' | 'replicate'
 app.post('/make-image', async (req: Request, res: Response) => {
-    const { modelApi, promptRephrase } = req.body; 
+    const { modelApi, promptRephrase, prompt } = req.body; 
     // Using any here because the image response is different for each model
     let image: any;
     if (typeof promptRephrase === 'string') {
