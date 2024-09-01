@@ -26,7 +26,6 @@ async function generateText(prompt: string) {
     const result = await model.generateContent(prompt)
     const response = result.response
     const text = response.text()
-    console.log(text)
     return text;
 }
 
@@ -60,7 +59,6 @@ function photoToAnalyze(path: string, mimeType: string) {
 async function analyzeImage(image: Part, prompt: string) {
     const { response } = await model.generateContent([prompt, image])
     const responseText = response.text()
-    console.log(responseText)
     return responseText;
 }
 

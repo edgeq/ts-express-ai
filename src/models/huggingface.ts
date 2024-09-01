@@ -48,7 +48,6 @@ async function blobToBuffer(blob: Blob) : Promise<Buffer> {
  * @param filename 
  */
 async function saveImage(blob: Blob, filename: string) {
-    console.log('saving image');
     const imageRoot = path.join(__dirname, '..', 'public', 'assets', 'images')
     const buffer = await blobToBuffer(blob)
     // get the imageRoot, save the buffer to the file system, and return the path once done

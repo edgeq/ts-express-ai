@@ -80,7 +80,6 @@ app.get('/make-prompt', async (req: Request, res: Response) => {
             const chunkSplit = chunk.text();
             if (chunk.candidates) {
                 if (chunk.text().endsWith(" \n") && chunk.candidates[0].finishReason === 'STOP') {
-                    console.log('SHOULD SEND STOP');
                     newPrompt += chunkSplit;
                     sendEvent({ promptResponse: chunkSplit });
                     sendEvent({});
@@ -90,7 +89,6 @@ app.get('/make-prompt', async (req: Request, res: Response) => {
                 newPrompt += chunkSplit;
             }
         }
-        console.log('newPrompt', newPrompt);
     }
     
     
